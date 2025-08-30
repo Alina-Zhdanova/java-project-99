@@ -12,10 +12,6 @@ jobs:
 
   build:
 
-    defaults:
-      run:
-        working-directory: ./java-project-99
-
     runs-on: ubuntu-latest
 
     steps:
