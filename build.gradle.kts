@@ -42,6 +42,5 @@ sonar {
 	properties {
 		property("sonar.projectKey", "Alina-Zhdanova_java-project-99")
 		property("sonar.organization", "alina-zhdanova")
-		property("sonar.sources", "src/main/java")
 	}
 }
