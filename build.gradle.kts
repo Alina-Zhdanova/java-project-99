@@ -5,6 +5,7 @@ plugins {
 	checkstyle
 	id("org.sonarqube") version "6.3.1.5724"
 	jacoco
+	application
 }
 
 group = "hexlet.code"
@@ -15,6 +16,10 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
+}
+
+application {
+	mainClass.set("hexlet.code.AppApplication")
 }
 
 repositories {
