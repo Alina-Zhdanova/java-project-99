@@ -11,6 +11,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -27,16 +28,25 @@ public abstract class UserMapper {
     private PasswordEncoder passwordEncoder;
 
     @BeforeMapping
-    public void encryptPassword(UserCreateDTO userCreateDTO) {
+    public void encryptCreatePassword(UserCreateDTO userCreateDTO) {
         var password = userCreateDTO.getPassword();
         userCreateDTO.setPassword(passwordEncoder.encode(password));
     }
 
-    @Mapping(target = "passwordDigest", source = "password")
+    @BeforeMapping
+    public void encryptUpdatePassword(UserUpdateDTO userUpdateDTO) {
+        if (userUpdateDTO.getPassword() != null && userUpdateDTO.getPassword().isPresent()) {
+            var password = userUpdateDTO.getPassword().get();
+            userUpdateDTO.setPassword(JsonNullable.of(passwordEncoder.encode(password)));
+        }
+    }
+
+    @Mapping(target = "password", ignore = true)
     public abstract User map(UserCreateDTO userCreateDTO);
 
     public abstract UserDTO map(User model);
 
-    @Mapping(target = "passwordDigest", source = "password")
+    @Mapping(target = "password", ignore = true)
     public abstract void update(UserUpdateDTO dto, @MappingTarget User model);
+
 }

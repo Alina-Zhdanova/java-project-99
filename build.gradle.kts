@@ -6,6 +6,7 @@ plugins {
 	id("org.sonarqube") version "6.3.1.5724"
 	jacoco
 	application
+	id("io.freefair.lombok") version "8.13.1"
 }
 
 group = "hexlet.code"
@@ -40,7 +41,6 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("org.postgresql:postgresql")
-	compileOnly("org.projectlombok:lombok")
 	testImplementation(platform("org.junit:junit-bom:5.10.0"))
 	testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

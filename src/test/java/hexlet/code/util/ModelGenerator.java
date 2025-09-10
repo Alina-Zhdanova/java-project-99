@@ -2,6 +2,7 @@ package hexlet.code.util;
 
 import hexlet.code.dto.UserCreateDTO;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import net.datafaker.Faker;
 import org.instancio.Select;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.instancio.Instancio;
 import org.instancio.Model;
 
 @Component
+@Getter
 public class ModelGenerator {
     private Model<UserCreateDTO> userCreateDTOModel;
 
@@ -26,7 +28,4 @@ public class ModelGenerator {
             .toModel();
     }
 
-    public Model<UserCreateDTO> getUserCreateDTOModel() {
-        return userCreateDTOModel;
-    }
 }
