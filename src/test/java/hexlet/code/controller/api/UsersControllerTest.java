@@ -54,7 +54,6 @@ class UsersControllerTest {
 
     private User admin;
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor adminToken;
-//    private UserCreateDTO testUserCreateDTO;
 
     @BeforeEach
     void setUp() {
@@ -70,13 +69,6 @@ class UsersControllerTest {
         adminToken = jwt().jwt(builder -> builder.subject(admin.getEmail()));
 
     }
-
-//    @AfterEach
-//    void tearDown() {
-//        if (newUser != null) {
-//            userRepository.delete(newUser);
-//        }
-//    }
 
     UserDTO createTestUser() throws Exception {
 
@@ -115,10 +107,10 @@ class UsersControllerTest {
 
         var body = response.getContentAsString();
         var actual = objectMapper.readValue(body, new TypeReference<List<UserDTO>>() { });
+        actual.removeFirst();
 
         assertNotNull(actual);
-        //assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
-
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test
