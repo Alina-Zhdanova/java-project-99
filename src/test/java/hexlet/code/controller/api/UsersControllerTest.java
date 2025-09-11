@@ -114,6 +114,26 @@ class UsersControllerTest {
     }
 
     @Test
+    void showTest() throws Exception {
+
+        var testUserDTO = createTestUser();
+        var testUserId = testUserDTO.getId();
+
+        var response = mockMvc.perform(get("/api/users/" + testUserId)
+            .with(adminToken))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+
+        var body = response.getContentAsString();
+        var actual = objectMapper.readValue(body, UserDTO.class);
+
+        assertNotNull(actual);
+        assertThat(actual).isEqualTo(testUserDTO);
+
+    }
+
+    @Test
     void testCreate() throws Exception {
 
         var testUserDTO = createTestUser();
