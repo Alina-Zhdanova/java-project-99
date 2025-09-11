@@ -3,9 +3,11 @@ package hexlet.code.controller.api;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -30,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @SpringBootTest
@@ -114,7 +117,7 @@ class UsersControllerTest {
     }
 
     @Test
-    void showTest() throws Exception {
+    void testShow() throws Exception {
 
         var testUserDTO = createTestUser();
         var testUserId = testUserDTO.getId();
@@ -143,6 +146,50 @@ class UsersControllerTest {
         assertNotNull(user);
         assertThat(user.getFirstName()).isEqualTo(testUserDTO.getFirstName());
         assertThat(user.getLastName()).isEqualTo(testUserDTO.getLastName());
+
+    }
+
+    @Test
+    void testUpdate() throws Exception {
+
+        var testUserDTO = createTestUser();
+        var testUserId = testUserDTO.getId();
+
+        var dataToUpdate = new HashMap<>();
+        dataToUpdate.put("firstName", "Mike");
+        dataToUpdate.put("lastName", "Wheeler");
+
+        var response = mockMvc.perform(put("/api/users/" + testUserId)
+            .with(adminToken)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(dataToUpdate)))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+
+        var body = response.getContentAsString();
+        var actual = objectMapper.readValue(body, UserDTO.class);
+
+        assertNotNull(actual);
+        assertThat(actual.getFirstName()).isEqualTo("Mike");
+        assertThat(actual.getLastName()).isEqualTo("Wheeler");
+    }
+
+    @Test
+    void testDestroy() throws Exception {
+
+        var testUserDTO = createTestUser();
+        var testUserId = testUserDTO.getId();
+
+        var response = mockMvc.perform(delete("/api/users/" + testUserId)
+            .with(adminToken))
+            .andExpect(status().isNoContent())
+            .andReturn()
+            .getResponse();
+
+        var body = response.getContentAsString();
+
+        assertThat(body).isEqualTo("");
 
     }
 
