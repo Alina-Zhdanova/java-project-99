@@ -13,6 +13,7 @@ import java.util.List;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -24,6 +25,7 @@ public class UserService {
         var result = users.stream()
             .map(userMapper::map)
             .toList();
+
         return result;
     }
 
@@ -31,6 +33,7 @@ public class UserService {
         var user = userMapper.map(userCreateDTO);
         userRepository.save(user);
         var userDTO = userMapper.map(user);
+
         return userDTO;
     }
 
@@ -38,6 +41,7 @@ public class UserService {
         var user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + "not found"));
         var userDTO = userMapper.map(user);
+
         return userDTO;
     }
 
@@ -47,6 +51,7 @@ public class UserService {
         userMapper.update(userUpdateDTO, user);
         userRepository.save(user);
         var userDTO = userMapper.map(user);
+
         return userDTO;
     }
 
