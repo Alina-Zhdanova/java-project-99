@@ -25,8 +25,6 @@ public class TaskStatusInitializer implements ApplicationRunner {
         for (var defaultTaskStatus : defaultTaskStatuses) {
             saveDefaultTaskStatus(defaultTaskStatus);
         }
-
-        var tasks = taskStatusRepository.findAll();
     }
 
     private List<Map<String, String>> getDefaultTaskStatuses() {

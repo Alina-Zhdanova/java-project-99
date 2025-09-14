@@ -1,20 +1,19 @@
 package hexlet.code.controller.api;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.dto.UserDTO;
+import hexlet.code.dto.TaskStatusDTO;
 import hexlet.code.exception.ResourceNotFoundException;
 import hexlet.code.model.User;
+import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.util.ModelGenerator;
 import jakarta.transaction.Transactional;
@@ -30,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ import java.util.List;
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-class UsersControllerTest {
+class TaskStatusControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -48,6 +48,9 @@ class UsersControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TaskStatusRepository taskStatusRepository;
 
     @Autowired
     private ModelGenerator modelGenerator;
@@ -71,84 +74,100 @@ class UsersControllerTest {
         adminToken = jwt().jwt(builder -> builder.subject(admin.getEmail()));
     }
 
-    UserDTO createTestUser() throws Exception {
-        var testUserCreateDTO = Instancio.of(modelGenerator.getUserCreateDTOModel()).create();
+    TaskStatusDTO createTaskStatus() throws Exception {
+        var testTaskStatusCreateDTO = Instancio.of(modelGenerator.getTaskStatusCreateDTOModel())
+            .create();
 
-        var request = post("/api/users")
+        var request = post("/api/task_statuses")
             .with(adminToken)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(testUserCreateDTO));
+            .content(objectMapper.writeValueAsString(testTaskStatusCreateDTO));
 
         var response = mockMvc.perform(request)
             .andReturn()
             .getResponse();
 
         var body = response.getContentAsString();
-        var userDTO = objectMapper.readValue(body, UserDTO.class);
+        var taskStatusDTO = objectMapper.readValue(body, TaskStatusDTO.class);
 
-        return userDTO;
+        return taskStatusDTO;
     }
 
     @Test
     void testIndex() throws Exception {
-        var testUserDTO1 = createTestUser();
-        var testUserDTO2 = createTestUser();
-        var testUserDTO3 = createTestUser();
-
-        var expected = new ArrayList<UserDTO>(List.of(testUserDTO1, testUserDTO2, testUserDTO3));
-
-        var response = mockMvc.perform(get("/api/users")
+        var firstResponse = mockMvc.perform(get("/api/task_statuses")
             .with(adminToken))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
 
-        var body = response.getContentAsString();
-        var actual = objectMapper.readValue(body, new TypeReference<List<UserDTO>>() { });
-        actual.removeFirst();
+        var firstBody = firstResponse.getContentAsString();
+        var defaultTaskStatuses = objectMapper
+            .readValue(firstBody, new TypeReference<List<TaskStatusDTO>>() { });
 
+        var expected = new ArrayList<>(defaultTaskStatuses);
+
+        var testTaskStatusDTO1 = createTaskStatus();
+        var testTaskStatusDTO2 = createTaskStatus();
+        var testTaskStatusDTO3 = createTaskStatus();
+
+        expected.add(testTaskStatusDTO1);
+        expected.add(testTaskStatusDTO2);
+        expected.add(testTaskStatusDTO3);
+
+        var secondResponse = mockMvc.perform(get("/api/task_statuses")
+            .with(adminToken))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+
+        var secondBody = secondResponse.getContentAsString();
+        var actual = objectMapper
+            .readValue(secondBody, new TypeReference<List<TaskStatusDTO>>() { });
+
+        assertNotNull(defaultTaskStatuses);
         assertNotNull(actual);
         assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test
     void testShow() throws Exception {
-        var testUserDTO = createTestUser();
-        var testUserId = testUserDTO.getId();
+        var testTaskStatusDTO = createTaskStatus();
+        var testTaskStatusId = testTaskStatusDTO.getId();
 
-        var response = mockMvc.perform(get("/api/users/" + testUserId)
+        var response = mockMvc.perform(get("/api/task_statuses/" + testTaskStatusId)
             .with(adminToken))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
 
         var body = response.getContentAsString();
-        var actual = objectMapper.readValue(body, UserDTO.class);
+        var actual = objectMapper.readValue(body, TaskStatusDTO.class);
 
         assertNotNull(actual);
-        assertThat(actual).isEqualTo(testUserDTO);
+        assertThat(actual).isEqualTo(testTaskStatusDTO);
     }
 
     @Test
     void testCreate() throws Exception {
-        var testUserDTO = createTestUser();
-        var user = userRepository.findByEmail(testUserDTO.getEmail()).orElse(null);
+        var testTaskStatusDTO = createTaskStatus();
+        var taskStatus = taskStatusRepository.findById(testTaskStatusDTO.getId()).orElse(null);
 
-        assertNotNull(user);
-        assertThat(user.getFirstName()).isEqualTo(testUserDTO.getFirstName());
-        assertThat(user.getLastName()).isEqualTo(testUserDTO.getLastName());
+        assertNotNull(taskStatus);
+        assertThat(taskStatus.getName()).isEqualTo(testTaskStatusDTO.getName());
+        assertThat(taskStatus.getSlug()).isEqualTo(testTaskStatusDTO.getSlug());
     }
 
     @Test
-    void testUpdate() throws Exception {
-        var testUserDTO = createTestUser();
-        var testUserId = testUserDTO.getId();
+    void update() throws Exception {
+        var testTaskStatusDTO = createTaskStatus();
+        var testTaskStatusId = testTaskStatusDTO.getId();
 
         var dataToUpdate = new HashMap<>();
-        dataToUpdate.put("firstName", "Mike");
-        dataToUpdate.put("lastName", "Wheeler");
+        dataToUpdate.put("name", "Completed");
+        dataToUpdate.put("slug", "completed");
 
-        var response = mockMvc.perform(put("/api/users/" + testUserId)
+        var response = mockMvc.perform(put("/api/task_statuses/" + testTaskStatusId)
             .with(adminToken)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(dataToUpdate)))
@@ -157,19 +176,19 @@ class UsersControllerTest {
             .getResponse();
 
         var body = response.getContentAsString();
-        var actual = objectMapper.readValue(body, UserDTO.class);
+        var actual = objectMapper.readValue(body, TaskStatusDTO.class);
 
         assertNotNull(actual);
-        assertThat(actual.getFirstName()).isEqualTo("Mike");
-        assertThat(actual.getLastName()).isEqualTo("Wheeler");
+        assertThat(actual.getName()).isEqualTo("Completed");
+        assertThat(actual.getSlug()).isEqualTo("completed");
     }
 
     @Test
     void testDestroy() throws Exception {
-        var testUserDTO = createTestUser();
-        var testUserId = testUserDTO.getId();
+        var testTaskStatusDTO = createTaskStatus();
+        var testTaskStatusId = testTaskStatusDTO.getId();
 
-        var response = mockMvc.perform(delete("/api/users/" + testUserId)
+        var response = mockMvc.perform(delete("/api/task_statuses/" + testTaskStatusId)
             .with(adminToken))
             .andExpect(status().isNoContent())
             .andReturn()
