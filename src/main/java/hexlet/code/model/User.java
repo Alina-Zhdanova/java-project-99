@@ -1,10 +1,13 @@
 package hexlet.code.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.EqualsAndHashCode;
@@ -20,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -31,12 +35,15 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(includeFieldNames = true, onlyExplicitlyIncluded = true)
 public class User implements BaseEntity, UserDetails {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @EqualsAndHashCode.Include
     @ToString.Include
     private Long id;
+
+    @OneToMany(mappedBy = "assignee")
+    @JsonIgnore
+    private List<Task> tasks = new ArrayList<>();
 
     @ToString.Include
     private String firstName;
@@ -91,5 +98,4 @@ public class User implements BaseEntity, UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
 }
