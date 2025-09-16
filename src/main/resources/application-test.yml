@@ -3,11 +3,13 @@
 spring:
   config:
     activate:
-      on-profile: production
-datasource:
+      on-profile: test
   datasource:
     driver-class-name: org.h2.Driver
-jpa:
-  hibernate:
-    ddl-auto: create-drop
-    show-sql: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      show-sql: false
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem

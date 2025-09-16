@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class UserMapper {
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -47,5 +46,4 @@ public abstract class UserMapper {
 
     @Mapping(target = "password", ignore = true)
     public abstract void update(UserUpdateDTO dto, @MappingTarget User model);
-
 }

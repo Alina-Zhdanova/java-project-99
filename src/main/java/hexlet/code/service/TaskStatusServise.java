@@ -4,16 +4,17 @@ import hexlet.code.dto.TaskStatusCreateDTO;
 import hexlet.code.dto.TaskStatusDTO;
 import hexlet.code.dto.TaskStatusUpdateDTO;
 import hexlet.code.exception.ResourceNotFoundException;
+import hexlet.code.exception.UserHasTasksException;
 import hexlet.code.mapper.TaskStatusMapper;
 import hexlet.code.repository.TaskStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class TaskStatusServise {
-
     @Autowired
     private TaskStatusRepository taskStatusRepository;
 
@@ -56,7 +57,11 @@ public class TaskStatusServise {
     }
 
     public void deleteTaskStatus(Long id) {
-        taskStatusRepository.deleteById(id);
+        try {
+            taskStatusRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new UserHasTasksException("Deletion is not possible, "
+                + "the TaskStatus is associated with one or more tasks.");
+        }
     }
-
 }
