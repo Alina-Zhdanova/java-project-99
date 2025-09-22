@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.dto.TaskStatusDTO;
 import hexlet.code.exception.ResourceNotFoundException;
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +43,6 @@ import java.util.List;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class TaskStatusControllerTest {
-
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -98,14 +99,15 @@ class TaskStatusControllerTest {
     @Test
     void testIndex() throws Exception {
         var firstResponse = mockMvc.perform(get("/api/task_statuses")
-            .with(adminToken))
+                .with(adminToken))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
 
         var firstBody = firstResponse.getContentAsString();
         var defaultTaskStatuses = objectMapper
-            .readValue(firstBody, new TypeReference<List<TaskStatusDTO>>() { });
+            .readValue(firstBody, new TypeReference<List<TaskStatusDTO>>() {
+            });
 
         var expected = new ArrayList<>(defaultTaskStatuses);
 
@@ -118,14 +120,15 @@ class TaskStatusControllerTest {
         expected.add(testTaskStatusDTO3);
 
         var secondResponse = mockMvc.perform(get("/api/task_statuses")
-            .with(adminToken))
+                .with(adminToken))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
 
         var secondBody = secondResponse.getContentAsString();
         var actual = objectMapper
-            .readValue(secondBody, new TypeReference<List<TaskStatusDTO>>() { });
+            .readValue(secondBody, new TypeReference<List<TaskStatusDTO>>() {
+            });
 
         assertNotNull(defaultTaskStatuses);
         assertNotNull(actual);
@@ -138,7 +141,7 @@ class TaskStatusControllerTest {
         var testTaskStatusId = testTaskStatusDTO.getId();
 
         var response = mockMvc.perform(get("/api/task_statuses/" + testTaskStatusId)
-            .with(adminToken))
+                .with(adminToken))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
@@ -170,9 +173,9 @@ class TaskStatusControllerTest {
         dataToUpdate.put("slug", "completed");
 
         var response = mockMvc.perform(put("/api/task_statuses/" + testTaskStatusId)
-            .with(adminToken)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(dataToUpdate)))
+                .with(adminToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dataToUpdate)))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
@@ -191,7 +194,7 @@ class TaskStatusControllerTest {
         var testTaskStatusId = testTaskStatusDTO.getId();
 
         var response = mockMvc.perform(delete("/api/task_statuses/" + testTaskStatusId)
-            .with(adminToken))
+                .with(adminToken))
             .andExpect(status().isNoContent())
             .andReturn()
             .getResponse();
@@ -200,5 +203,4 @@ class TaskStatusControllerTest {
 
         assertThat(body).isEqualTo("");
     }
-
 }
