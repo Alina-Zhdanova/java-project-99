@@ -11,15 +11,12 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class TaskStatusDTO {
+public class LabelDTO {
     @EqualsAndHashCode.Include
     private Long id;
 
     @EqualsAndHashCode.Include
     private String name;
 
-    @EqualsAndHashCode.Include
-    private String slug;
-
-    private LocalDate createdAT;
+    private LocalDate createdAt;
 }

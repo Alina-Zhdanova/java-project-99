@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsManager {
-
     @Autowired
     private UserRepository userRepository;
 
@@ -53,5 +52,4 @@ public class CustomUserDetailsService implements UserDetailsManager {
     public boolean userExists(String username) {
         throw new UnsupportedOperationException("Unimplemented method 'userExists'");
     }
-
 }

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class UserInitializer implements ApplicationRunner {
-
     @Autowired
     private UserRepository userRepository;
 
@@ -27,5 +26,4 @@ public class UserInitializer implements ApplicationRunner {
         userData.setPasswordDigest("qwerty");
         customUserDetailsService.createUser(userData);
     }
-
 }

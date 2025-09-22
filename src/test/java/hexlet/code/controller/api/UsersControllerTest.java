@@ -41,7 +41,6 @@ import java.util.List;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class UsersControllerTest {
-
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -100,13 +99,14 @@ class UsersControllerTest {
         var expected = new ArrayList<UserDTO>(List.of(testUserDTO1, testUserDTO2, testUserDTO3));
 
         var response = mockMvc.perform(get("/api/users")
-            .with(adminToken))
+                .with(adminToken))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
 
         var body = response.getContentAsString();
-        var actual = objectMapper.readValue(body, new TypeReference<List<UserDTO>>() { });
+        var actual = objectMapper.readValue(body, new TypeReference<List<UserDTO>>() {
+        });
         actual.removeFirst();
 
         assertNotNull(actual);
@@ -119,7 +119,7 @@ class UsersControllerTest {
         var testUserId = testUserDTO.getId();
 
         var response = mockMvc.perform(get("/api/users/" + testUserId)
-            .with(adminToken))
+                .with(adminToken))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
@@ -151,9 +151,9 @@ class UsersControllerTest {
         dataToUpdate.put("lastName", "Wheeler");
 
         var response = mockMvc.perform(put("/api/users/" + testUserId)
-            .with(adminToken)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(dataToUpdate)))
+                .with(adminToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dataToUpdate)))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
@@ -172,7 +172,7 @@ class UsersControllerTest {
         var testUserId = testUserDTO.getId();
 
         var response = mockMvc.perform(delete("/api/users/" + testUserId)
-            .with(adminToken))
+                .with(adminToken))
             .andExpect(status().isNoContent())
             .andReturn()
             .getResponse();
@@ -181,5 +181,4 @@ class UsersControllerTest {
 
         assertThat(body).isEqualTo("");
     }
-
 }

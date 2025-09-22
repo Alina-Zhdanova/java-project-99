@@ -1,6 +1,5 @@
 package hexlet.code.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -41,7 +40,6 @@ public class User implements BaseEntity, UserDetails {
     private Long id;
 
     @OneToMany(mappedBy = "assignee")
-    @JsonIgnore
     private List<Task> tasks = new ArrayList<>();
 
     @ToString.Include

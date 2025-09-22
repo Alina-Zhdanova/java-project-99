@@ -1,5 +1,7 @@
 package hexlet.code.util;
 
+import hexlet.code.dto.LabelCreateDTO;
+import hexlet.code.dto.LabelDTO;
 import hexlet.code.dto.TaskCreateDTO;
 import hexlet.code.dto.TaskStatusCreateDTO;
 import hexlet.code.dto.UserCreateDTO;
@@ -18,6 +20,7 @@ public class ModelGenerator {
     private Model<UserCreateDTO> userCreateDTOModel;
     private Model<TaskStatusCreateDTO> taskStatusCreateDTOModel;
     private Model<TaskCreateDTO> taskCreateDTOModel;
+    private Model<LabelCreateDTO> labelCreateDTOModel;
 
     @Autowired
     private Faker faker;
@@ -41,6 +44,10 @@ public class ModelGenerator {
             .supply(Select.field(TaskCreateDTO::getTitle), () -> faker.lorem().word())
             .supply(Select.field(TaskCreateDTO::getContent), () -> faker.lorem().word())
             .supply(Select.field(TaskCreateDTO::getStatus), () -> faker.lorem().word())
+            .toModel();
+
+        labelCreateDTOModel = Instancio.of(LabelCreateDTO.class)
+            .supply(Select.field(LabelCreateDTO::getName), () -> faker.lorem().word())
             .toModel();
     }
 }

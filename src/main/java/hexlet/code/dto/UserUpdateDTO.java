@@ -11,7 +11,6 @@ import org.openapitools.jackson.nullable.JsonNullable;
 @Setter
 @AllArgsConstructor
 public class UserUpdateDTO {
-
     @Email
     private JsonNullable<String> email;
 
@@ -20,6 +19,4 @@ public class UserUpdateDTO {
 
     @Size(min = 3)
     private JsonNullable<String> password;
-
-
 }

@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TaskDTO {
-
     @EqualsAndHashCode.Include
     private Long id;
 

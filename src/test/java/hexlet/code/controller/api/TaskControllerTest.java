@@ -138,7 +138,7 @@ public class TaskControllerTest {
         var expected = List.of(testTaskDTO1, testTaskDTO2, testTaskDTO3);
 
         var response = mockMvc.perform(get("/api/tasks")
-            .with(adminToken))
+                .with(adminToken))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();

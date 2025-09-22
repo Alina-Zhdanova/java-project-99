@@ -14,7 +14,6 @@ import java.util.Map;
 @Component
 @AllArgsConstructor
 public class TaskStatusInitializer implements ApplicationRunner {
-
     @Autowired
     private TaskStatusRepository taskStatusRepository;
 
@@ -58,5 +57,4 @@ public class TaskStatusInitializer implements ApplicationRunner {
         taskStatus.setSlug(defaultTaskStatus.get("slug"));
         taskStatusRepository.save(taskStatus);
     }
-
 }

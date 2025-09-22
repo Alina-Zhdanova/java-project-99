@@ -28,7 +28,7 @@ public class TaskServise {
         return result;
     }
 
-    public  TaskDTO createTask(TaskCreateDTO taskCreateDTO) {
+    public TaskDTO createTask(TaskCreateDTO taskCreateDTO) {
         var task = taskMapper.map(taskCreateDTO);
         taskRepository.save(task);
         var taskDTO = taskMapper.map(task);

@@ -4,15 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDate;
 
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserDTO {
-
     @EqualsAndHashCode.Include
     private Long id;
 
@@ -26,5 +25,4 @@ public class UserDTO {
     private String lastName;
 
     private LocalDate createdAt;
-
 }

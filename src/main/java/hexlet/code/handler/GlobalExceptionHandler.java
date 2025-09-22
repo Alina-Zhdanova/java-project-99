@@ -1,5 +1,6 @@
 package hexlet.code.handler;
 
+import hexlet.code.exception.LabelHasTasksException;
 import hexlet.code.exception.ResourceNotFoundException;
 import hexlet.code.exception.TaskStatusHasTasksException;
 import hexlet.code.exception.UserHasTasksException;
@@ -23,6 +24,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(TaskStatusHasTasksException.class)
     public ResponseEntity<String> handleTaskStatusHasTasksException(TaskStatusHasTasksException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(LabelHasTasksException.class)
+    public ResponseEntity<String> handleLabelHasTasksException(LabelHasTasksException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 }

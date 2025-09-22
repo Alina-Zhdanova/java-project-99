@@ -60,7 +60,7 @@ public class UserService {
         try {
             userRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new UserHasTasksException("Deletion is not possible, the User is associated with one or more tasks.");
+            throw new UserHasTasksException("Deletion is not possible, the User is associated with one or more tasks");
         }
     }
 }

@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class UserCreateDTO {
-
     @Email
     private String email;
 
@@ -23,5 +22,4 @@ public class UserCreateDTO {
 
     @Size(min = 3)
     private String password;
-
 }
