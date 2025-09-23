@@ -1,7 +1,6 @@
 package hexlet.code.util;
 
 import hexlet.code.dto.LabelCreateDTO;
-import hexlet.code.dto.LabelDTO;
 import hexlet.code.dto.TaskCreateDTO;
 import hexlet.code.dto.TaskStatusCreateDTO;
 import hexlet.code.dto.UserCreateDTO;
@@ -47,7 +46,7 @@ public class ModelGenerator {
             .toModel();
 
         labelCreateDTOModel = Instancio.of(LabelCreateDTO.class)
-            .supply(Select.field(LabelCreateDTO::getName), () -> faker.lorem().word())
+            .supply(Select.field(LabelCreateDTO::getName), () -> faker.lorem().characters(3, 1000))
             .toModel();
     }
 }

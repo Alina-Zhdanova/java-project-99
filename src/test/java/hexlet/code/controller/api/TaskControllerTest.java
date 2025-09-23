@@ -219,6 +219,6 @@ public class TaskControllerTest {
 
         var body = response.getContentAsString();
 
-        assertThat(body).isEqualTo("");
+        assertThat(body).isEmpty();
     }
 }

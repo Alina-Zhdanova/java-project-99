@@ -87,6 +87,7 @@ class TaskStatusControllerTest {
             .content(objectMapper.writeValueAsString(testTaskStatusCreateDTO));
 
         var response = mockMvc.perform(request)
+            .andExpect(status().isCreated())
             .andReturn()
             .getResponse();
 
@@ -201,6 +202,6 @@ class TaskStatusControllerTest {
 
         var body = response.getContentAsString();
 
-        assertThat(body).isEqualTo("");
+        assertThat(body).isEmpty();
     }
 }
