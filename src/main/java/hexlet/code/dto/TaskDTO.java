@@ -6,12 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TaskDTO {
+    private List<Long> labels;
+
     @EqualsAndHashCode.Include
     private Long id;
 

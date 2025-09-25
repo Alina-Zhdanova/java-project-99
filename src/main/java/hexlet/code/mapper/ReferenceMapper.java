@@ -12,6 +12,9 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.TargetType;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mapper(
     componentModel = MappingConstants.ComponentModel.SPRING
 )
@@ -43,5 +46,36 @@ public abstract class ReferenceMapper {
             ? labelRepository.findByName(name)
             .orElseThrow(() -> new ResourceNotFoundException("Label with name " + name + "not found"))
             : null;
+    }
+
+    public List<Label> toListLabels(List<Long> listLabelsId) {
+        var result = new ArrayList<Label>();
+
+        if (listLabelsId == null || listLabelsId.isEmpty()) {
+            return result;
+        }
+
+        for (var labelId : listLabelsId) {
+            var label = labelRepository.findById(labelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Label with id " + labelId + "not found"));
+            result.add(label);
+        }
+
+        return result;
+    }
+
+    public List<Long> toListLabelsId(List<Label> listLabels) {
+        var result = new ArrayList<Long>();
+
+        if (listLabels == null || listLabels.isEmpty()) {
+            return result;
+        }
+
+        for (var label : listLabels) {
+            var labelId = label.getId();
+            result.add(labelId);
+        }
+
+        return result;
     }
 }

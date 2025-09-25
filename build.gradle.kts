@@ -37,6 +37,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("net.datafaker:datafaker:2.0.1")
 	implementation("org.instancio:instancio-junit:3.3.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
+
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	annotationProcessor("org.projectlombok:lombok")
 	runtimeOnly("com.h2database:h2")

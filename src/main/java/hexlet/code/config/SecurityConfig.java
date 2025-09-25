@@ -35,10 +35,18 @@ public class SecurityConfig {
         return http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/index.html").permitAll()
-                .requestMatchers("/assets/**").permitAll()
-                .requestMatchers("/api/login").permitAll()
+                .requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui.html",
+                    "/swagger-ui/**"
+                ).permitAll()
+                .requestMatchers(
+                    "/index.html",
+                    "/assets/**"
+                ).permitAll()
+                .requestMatchers(
+                    "/api/login"
+                ).permitAll()
                 .anyRequest().authenticated())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

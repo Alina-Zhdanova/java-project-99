@@ -7,6 +7,7 @@ import hexlet.code.dto.TaskStatusDTO;
 import hexlet.code.dto.UserDTO;
 import hexlet.code.exception.ResourceNotFoundException;
 import hexlet.code.model.User;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
@@ -59,6 +60,9 @@ public class TaskControllerTest {
 
     @Autowired
     private TaskStatusRepository taskStatusRepository;
+
+    @Autowired
+    private LabelRepository labelRepository;
 
     @Autowired
     private ModelGenerator modelGenerator;
@@ -115,6 +119,9 @@ public class TaskControllerTest {
         var taskStatusDTO = objectMapper.readValue(taskStatusBody, TaskStatusDTO.class);
 
         testTaskCreateDTO.setStatus(taskStatusDTO.getSlug());
+
+        var labelId = labelRepository.findByName("bug").get().getId();
+        testTaskCreateDTO.setLabels(List.of(labelId));
 
         var taskResponse = mockMvc.perform(post("/api/tasks")
                 .with(adminToken)
