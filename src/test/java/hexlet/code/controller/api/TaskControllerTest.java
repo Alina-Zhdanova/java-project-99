@@ -38,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
@@ -151,7 +152,10 @@ public class TaskControllerTest {
             .getResponse();
 
         var body = response.getContentAsString();
-        var actual = objectMapper.readValue(body, new TypeReference<List<TaskDTO>>() {
+        var bodyMap = objectMapper.readValue(body, new TypeReference<Map<String, Object>>() {
+        });
+        var content = objectMapper.writeValueAsString(bodyMap.get("content"));
+        var actual = objectMapper.readValue(content, new TypeReference<List<TaskDTO>>() {
         });
 
         assertNotNull(actual);

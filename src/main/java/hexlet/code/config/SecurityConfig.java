@@ -45,7 +45,8 @@ public class SecurityConfig {
                     "/assets/**"
                 ).permitAll()
                 .requestMatchers(
-                    "/api/login"
+                    "/api/login",
+                    "/"
                 ).permitAll()
                 .anyRequest().authenticated())
             .sessionManagement(session -> session

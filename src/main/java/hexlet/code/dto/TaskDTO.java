@@ -13,10 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TaskDTO {
-    private List<Long> labels;
 
     @EqualsAndHashCode.Include
     private Long id;
+
+    private List<Long> labels;
 
     @EqualsAndHashCode.Include
     private int index;
