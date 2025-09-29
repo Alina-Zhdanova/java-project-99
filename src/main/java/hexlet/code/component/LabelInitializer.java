@@ -16,13 +16,13 @@ public class LabelInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        var featureLabel = new Label();
-        featureLabel.setName("feature");
         var bugLabel = new Label();
         bugLabel.setName("bug");
+        var featureLabel = new Label();
+        featureLabel.setName("feature");
 
-        labelRepository.save(featureLabel);
         labelRepository.save(bugLabel);
+        labelRepository.save(featureLabel);
     }
 }
 

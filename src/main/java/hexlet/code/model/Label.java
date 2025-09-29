@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -39,12 +37,7 @@ public class Label implements BaseEntity {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @ManyToMany
-    @JoinTable(
-        name = "label_task",
-        joinColumns = @JoinColumn(name = "task_id"),
-        inverseJoinColumns = @JoinColumn(name = "label_id")
-    )
+    @ManyToMany(mappedBy = "labels")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Task> tasks = new ArrayList<>();
 

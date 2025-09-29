@@ -18,12 +18,14 @@ import org.mapstruct.ReportingPolicy;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class TaskMapper {
+    @Mapping(source = "taskLabelIds", target = "labels")
     @Mapping(source = "assigneeId", target = "assignee")
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
     @Mapping(source = "status", target = "taskStatus")
     public abstract Task map(TaskCreateDTO taskCreateDTO);
 
+    @Mapping(source = "labels", target = "taskLabelIds")
     @Mapping(source = "assignee.id", target = "assigneeId")
     @Mapping(source = "name", target = "title")
     @Mapping(source = "description", target = "content")

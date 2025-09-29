@@ -21,5 +21,5 @@ public class TaskStatusDTO {
     @EqualsAndHashCode.Include
     private String slug;
 
-    private LocalDate createdAT;
+    private LocalDate createdAt;
 }

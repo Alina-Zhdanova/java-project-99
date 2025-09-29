@@ -7,8 +7,8 @@ import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.service.TaskServise;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
@@ -27,8 +29,13 @@ public class TaskController {
     private TaskServise taskServise;
 
     @GetMapping("")
-    public Page<TaskDTO> index(TaskParamsDTO taskParamsDTO, @RequestParam(defaultValue = "1") int page) {
-        return taskServise.getAllTasks(taskParamsDTO, page);
+    public ResponseEntity<List<TaskDTO>> index(TaskParamsDTO taskParamsDTO,
+                                               @RequestParam(defaultValue = "1") int page) {
+        var tasks = taskServise.getAllTasks(taskParamsDTO, page).getContent();
+
+        return ResponseEntity.ok()
+            .header("X-Total-Count", String.valueOf(tasks.size()))
+            .body(tasks);
     }
 
     @GetMapping("/{id}")

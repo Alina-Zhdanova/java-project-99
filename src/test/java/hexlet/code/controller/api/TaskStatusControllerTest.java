@@ -165,7 +165,7 @@ class TaskStatusControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void testUpdate() throws Exception {
         var testTaskStatusDTO = createTaskStatus();
         var testTaskStatusId = testTaskStatusDTO.getId();
 

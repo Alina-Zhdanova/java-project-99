@@ -9,6 +9,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -47,7 +48,12 @@ public class Task implements BaseEntity {
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private TaskStatus taskStatus;
 
-    @ManyToMany(mappedBy = "tasks")
+    @ManyToMany
+    @JoinTable(
+        name = "label_task",
+        joinColumns = @JoinColumn(name = "task_id"),
+        inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
     private List<Label> labels = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
