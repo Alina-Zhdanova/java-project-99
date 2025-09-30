@@ -147,8 +147,11 @@ class UsersControllerTest {
         var testUserId = testUserDTO.getId();
 
         var dataToUpdate = new HashMap<>();
-        dataToUpdate.put("firstName", "Mike");
+        dataToUpdate.put("email", "WheelerMike@gmail.com");
+        dataToUpdate.put("firstName", "null");
         dataToUpdate.put("lastName", "Wheeler");
+        dataToUpdate.put("password", "Wheeler_Mike_1999");
+
 
         var response = mockMvc.perform(put("/api/users/" + testUserId)
                 .with(adminToken)
@@ -162,7 +165,8 @@ class UsersControllerTest {
         var actual = objectMapper.readValue(body, UserDTO.class);
 
         assertNotNull(actual);
-        assertThat(actual.getFirstName()).isEqualTo("Mike");
+        assertThat(actual.getEmail()).isEqualTo("WheelerMike@gmail.com");
+        assertThat(actual.getFirstName()).isEqualTo("null");
         assertThat(actual.getLastName()).isEqualTo("Wheeler");
     }
 

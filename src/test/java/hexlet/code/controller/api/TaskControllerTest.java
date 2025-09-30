@@ -159,6 +159,30 @@ public class TaskControllerTest {
     }
 
     @Test
+    void testFilteredIndex() throws Exception {
+        var testTaskDTO1 = createTask();
+        createTask();
+        createTask();
+
+        var expected = List.of(testTaskDTO1);
+
+        var response = mockMvc
+            .perform(get("/api/tasks?titleCont=" + testTaskDTO1.getTitle())
+                .with(adminToken))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+
+        var body = response.getContentAsString();
+        var actual = objectMapper.readValue(body, new TypeReference<List<TaskDTO>>() {
+        });
+
+        assertNotNull(actual);
+        assertThat(taskRepository.findAll()).hasSize(3);
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
+    }
+
+    @Test
     void testShow() throws Exception {
         var testTaskDTO = createTask();
         var testTaskId = testTaskDTO.getId();

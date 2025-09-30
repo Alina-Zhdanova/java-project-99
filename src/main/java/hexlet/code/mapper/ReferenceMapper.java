@@ -41,13 +41,6 @@ public abstract class ReferenceMapper {
             : null;
     }
 
-    public Label toLabel(String name) {
-        return name != null
-            ? labelRepository.findByName(name)
-            .orElseThrow(() -> new ResourceNotFoundException("Label with name " + name + "not found"))
-            : null;
-    }
-
     public List<Label> toListLabels(List<Long> listLabelsId) {
         var result = new ArrayList<Label>();
 
