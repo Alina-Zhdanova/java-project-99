@@ -7,6 +7,7 @@ plugins {
 	jacoco
 	application
 	id("io.freefair.lombok") version "8.13.1"
+	id("io.sentry.jvm.gradle") version "5.12.0"
 }
 
 group = "hexlet.code"
@@ -62,4 +63,16 @@ sonar {
 		property("sonar.projectKey", "Alina-Zhdanova_java-project-99")
 		property("sonar.organization", "alina-zhdanova")
 	}
+}
+
+tasks.sentryBundleSourcesJava {
+	enabled = System.getenv("SENTRY_AUTH_TOKEN") != null
+}
+
+sentry {
+	includeSourceContext.set(true)
+
+	org.set("alina-zhdanova")
+	projectName.set("java-spring-boot")
+	authToken.set(System.getenv("SENTRY_AUTH_TOKEN"))
 }

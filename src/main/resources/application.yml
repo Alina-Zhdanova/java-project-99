@@ -16,3 +16,6 @@ spring:
 rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem
+sentry:
+  dsn: https://790306d2da9f46c6a8c0f8ded4207b4d@o4510109383852032.ingest.de.sentry.io/4510109387915344
+  send-default-pii: true
