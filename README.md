@@ -37,7 +37,7 @@
 
 1.  **Клонируйте репозиторий** и перейдите в папку проекта:
     ```bash
-    git clone [https://github.com/Alina-Zhdanova/java-project-99.git](https://github.com/Alina-Zhdanova/java-project-99.git)
+    git clone https://github.com/Alina-Zhdanova/java-project-99.git
     cd java-project-99
     ```
 
