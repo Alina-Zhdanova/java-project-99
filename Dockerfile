@@ -6,6 +6,7 @@ COPY gradle gradle
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 COPY gradlew .
+COPY config .
 
 COPY src src
 
