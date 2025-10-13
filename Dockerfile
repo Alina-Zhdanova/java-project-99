@@ -1,12 +1,17 @@
-FROM gradle:8.13-jdk21
+FROM eclipse-temurin:21-jdk
 
-WORKDIR /app
+WORKDIR /backend
 
-COPY . .
+COPY gradle gradle
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
+COPY gradlew .
 
-RUN ["./gradlew", "clean", "build"]
+COPY src src
+
+RUN ./gradlew --no-daemon build -x test
 
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=60.0 -XX:InitialRAMPercentage=50.0"
 EXPOSE 8080
 
-CMD ["./gradlew", "run"]
+CMD java -jar build/libs/app-0.0.1-SNAPSHOT.jar
